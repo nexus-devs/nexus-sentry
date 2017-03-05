@@ -19,7 +19,8 @@ If you're on Windows, you can grab pre-compiled binaries from the [UB Mannheim r
 ## Output
 By default, requests are sent to **localhost:1337** with the following payload:
 
-```{
+```
+{
     'username': Username,
     'to': Request[0],
     'item': Request[1],
@@ -27,7 +28,8 @@ By default, requests are sent to **localhost:1337** with the following payload:
     'type': Request[3],
     'price': Request[4],
     'user_key': 'user key for auth',
-    'user_secret': pwd // From .sources/pwd.txt
-}```
+    'user_secret': 'password from .sources/pwd.txt'
+}
+```
 
 You can change these settings towards the end of NexusSentry.py
