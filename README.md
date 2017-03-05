@@ -28,7 +28,7 @@ By default, requests are sent to **localhost:1337** with the following payload:
     'type': Request[3],
     'price': Request[4],
     'user_key': 'user key for auth',
-    'user_secret': 'password from .sources/pwd.txt'
+    'user_secret': 'password from ./sources/pwd.txt'
 }
 ```
 
