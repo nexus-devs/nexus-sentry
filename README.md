@@ -3,7 +3,7 @@
 [![Supported by Warframe Community Developers](https://github.com/Warframe-Community-Developers/banner/blob/master/banner.png)](https://github.com/Warframe-Community-Developers)
 
 ## Requirements
-**This script depends on TesseractOCR 3.02 or higher**
+**This script depends on TesseractOCR 3.02 or higher**<br />
 You can compile it yourself from the [official TesseractOCR repo](https://github.com/tesseract-ocr/tesseract)<br />
 If you're on Windows, you can grab pre-compiled binaries from the [UB Mannheim repo](https://github.com/UB-Mannheim/tesseract/wiki)
 
