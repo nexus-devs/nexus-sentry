@@ -9,9 +9,10 @@ If you're on Windows, you can grab pre-compiled binaries from the [UB Mannheim r
 
 
 ## Setup
-1. Make sure to run a borderless-windowed instance of Warframe in 1920x1080
-2. Maximize the trade chat and align it in the very top left corner
-3. Run the script
+1. Insert the item data in `/sources/items.json` to your local mongodb server (db: 'warframenexus', collection: 'itemlist')
+2. Make sure to run a borderless-windowed instance of Warframe in 1920x1080
+3. Maximize the trade chat and align it in the very top left corner
+4. Run the script
 
 **Note:** The detection works best on medium text-size, with emojis turned off, and brightness & contrast on 0 in video options
 
