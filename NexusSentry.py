@@ -113,10 +113,6 @@ while True:
 
                 print(Request)
 
-                # Open secret password
-                with open('./sources/pwd.txt', 'r') as myfile:
-                    pwd=myfile.read().replace('\n', '')
-
                 payload = \
                 {
                     'username': Username,
@@ -126,7 +122,7 @@ while True:
                     'type': Request[3],
                     'price': Request[4],
                     'user': 'python',
-                    'password': pwd
+                    'password': "super secret"
                 }
 
                 res = requests.post('http://localhost:1337/requests', data=json.dumps(payload))
