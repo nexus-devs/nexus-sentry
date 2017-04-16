@@ -24,10 +24,13 @@ import time
 
 
 
+# Open secret password
+with open('./sources/pwd.txt', 'r') as myfile:
+    pwd=myfile.read().replace('\n', '')
+    
 # Connect to MongoDB
 client = MongoClient('mongodb://localhost:27017/')
 db = client.warframenexus
-
 
 # Set up Request Lists to avoid double-posting in short time
 timestart = calendar.timegm(time.gmtime())
@@ -40,7 +43,6 @@ for i in range(0, 30):
     RequestCache.append(i)
 for i in range(0, 6):
     NexusBotCache.append(i)
-
 
 
 
