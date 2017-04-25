@@ -1,4 +1,4 @@
-![Nexus-Stats Dev Version v0.1.1](/banner.png)
+[![Nexus-Sentry](/banner.png)](https://github.com/nexus-devs)
 
 - - - -
 <br>
