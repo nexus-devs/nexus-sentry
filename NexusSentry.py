@@ -123,8 +123,8 @@ while True:
                     'comp': Request[2],
                     'type': Request[3],
                     'price': Request[4],
-                    'user': 'python',
-                    'password': "super secret"
+                    'user_key': 'python',
+                    'user_secret': "super secret"
                 }
 
                 res = requests.post('http://localhost:1337/requests', data=json.dumps(payload))
