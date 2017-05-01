@@ -5,16 +5,11 @@ import interpreter #for interpreting messages
 
 # Connections
 # ----------------------
-import sys
-import requests
-import json
-from pymongo import MongoClient
-from bson.json_util import dumps
+from blitz_js_query.blitz import Blitz
 
 # NexusBot
 # ----------------------
 import NexusBot
-from pywinauto import application
 
 # Misc
 # ----------------------
@@ -24,13 +19,6 @@ import time
 
 
 
-# Open secret password
-with open('./sources/pwd.txt', 'r') as myfile:
-    pwd=myfile.read().replace('\n', '')
-    
-# Connect to MongoDB
-client = MongoClient('mongodb://localhost:27017/')
-db = client.warframenexus
 
 # Set up Request Lists to avoid double-posting in short time
 timestart = calendar.timegm(time.gmtime())
@@ -43,6 +31,13 @@ for i in range(0, 30):
     RequestCache.append(i)
 for i in range(0, 6):
     NexusBotCache.append(i)
+
+# Connect to api.nexus-stats.com
+api = Blitz({
+    "api_url": "https://api.nexus-stats.com",
+    "api_port": "443"
+})
+ItemList = {}
 
 
 
@@ -67,8 +62,7 @@ while True:
     #---------------------------
 
     # Get item database from Nexus
-    ItemList = db.itemlist.find()
-    ItemJSON = json.loads(dumps(ItemList))
+    api.get("/warframe/v1/items/list").then(lambda res: print(res))
 
 
 
@@ -94,7 +88,6 @@ while True:
 
 
         # = Start Message Body Interpretation =
-
         for i in range(0, len(MsgWords)):
 
             # Determine Trade Operator
@@ -127,7 +120,7 @@ while True:
                     'user_secret': "super secret"
                 }
 
-                res = requests.post('http://localhost:1337/requests', data=json.dumps(payload))
+                api.post("/warframe/v1/requests/new", payload)
 
         # = End of Message Body Interpretation =
 
