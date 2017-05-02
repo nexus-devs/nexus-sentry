@@ -6,10 +6,7 @@ import interpreter #for interpreting messages
 # Connections
 # ----------------------
 from blitz_js_query.blitz import Blitz
-
-# NexusBot
-# ----------------------
-import NexusBot
+import ast
 
 # Misc
 # ----------------------
@@ -33,15 +30,13 @@ for i in range(0, 6):
     NexusBotCache.append(i)
 
 # Connect to api.nexus-stats.com
-api = Blitz({
-    "api_url": "https://api.nexus-stats.com",
-    "api_port": "443"
-})
-ItemList = {}
+api = Blitz()
+ItemJSON = []
 
 
 
 while True:
+
 
     # Screen rendering & OCR
     #---------------------------
@@ -61,9 +56,14 @@ while True:
     # Message interpretation
     #---------------------------
 
-    # Get item database from Nexus
-    api.get("/warframe/v1/items/list").then(lambda res: print(res))
 
+    # Get item database from Nexus
+
+    def assignJSON(res):
+        global ItemJSON
+        ItemJSON = ast.literal_eval(res["body"])
+
+    api.get("/warframe/v1/items/list").then(lambda res: assignJSON(res))
 
 
     # = Process each line =
@@ -110,14 +110,12 @@ while True:
 
                 payload = \
                 {
-                    'username': Username,
-                    'to': Request[0],
+                    'user': Username,
+                    'offer': Request[0],
                     'item': Request[1],
-                    'comp': Request[2],
+                    'component': Request[2],
                     'type': Request[3],
-                    'price': Request[4],
-                    'user_key': 'python',
-                    'user_secret': "super secret"
+                    'price': Request[4]
                 }
 
                 api.post("/warframe/v1/requests/new", payload)
