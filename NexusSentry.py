@@ -115,7 +115,7 @@ while True:
                     'item': Request[1],
                     'component': Request[2],
                     'type': Request[3],
-                    'price': Request[4]
+                    'price': int(Request[4]) if Requests[4] != 'null' else 'null'
                 }
 
                 api.post("/warframe/v1/requests/new", payload)
