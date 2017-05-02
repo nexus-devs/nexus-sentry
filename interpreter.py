@@ -118,11 +118,11 @@ def getUsername(stringArr):
 # Check if given string is TO, then return type
 def getTradeOperator(string):
     if string in WTS:
-        TO = 'WTS'
+        TO = 'Selling'
     elif string in WTB:
-        TO = 'WTB'
-    elif string in PC:
-        TO = 'PC'
+        TO = 'Buying'
+    #elif string in PC:
+    #    TO = 'PC'
     else:
         TO = None
     return(TO)
@@ -239,13 +239,3 @@ def appendComponents(array):
                 array.extend(CompList)
 
     return(array)
-
-
-
-
-
-
-
-
-
-

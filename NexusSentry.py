@@ -112,9 +112,9 @@ while True:
                 {
                     'user': Username,
                     'offer': Request[0],
-                    'item': Request[1],
-                    'component': Request[2],
-                    'type': Request[3],
+                    'item': Request[1].title(),
+                    'component': Request[2].title(),
+                    'type': Request[3].title(),
                     'price': int(Request[4]) if Requests[4] != 'null' else 'null'
                 }
 
