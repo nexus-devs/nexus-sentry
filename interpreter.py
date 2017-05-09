@@ -150,7 +150,7 @@ def getRequest(i, stringArr, ItemJSON, TOcount, TOval):
 
     # Check if string matches any ID
     for j in range(0, len(ItemJSON)):
-        dbID = ItemJSON[j]["_id"].upper()
+        dbID = ItemJSON[j]["name"].upper()
         dbIDwords = dbID.split()
         dbType = ItemJSON[j]["type"].upper()
         dbComp = [each.upper() for each in ItemJSON[j]["components"]]
