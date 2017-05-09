@@ -25,18 +25,14 @@ By default, requests are sent to **localhost:3010/warframe/v1/requests/new** wit
 
 ```
 {
-    'username': Username,
-    'to': Request[0],
-    'item': Request[1],
-    'comp': Request[2],
-    'type': Request[3],
-    'price': Request[4],
-    'user_key': 'user key for auth',
-    'user_secret': 'user secret for auth'
+    'user': Username,
+    'offer': Request[0],
+    'item': Request[1].title(),
+    'component': Request[2].title(),
+    'type': Request[3].title(),
+    'price': int(Request[4]) if Requests[4] != 'null' else 'null'
 }
 ```
-
-You can change these settings towards the end of NexusSentry.py
 
 <br>
 
