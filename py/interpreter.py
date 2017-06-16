@@ -1,84 +1,5 @@
-# Text Processing
-# ----------------------
 import re
-import collections
-import string
-
-
-
-# Message modifications
-#---------------------------
-
-# Remove redundant characters
-def cleanAll(Msg):
-
-    Msg = [each.replace('ï¬', 'fl') for each in Msg]
-    Msg = [each.replace('\n', '') for each in Msg]
-    Msg = [each.replace('\s \n', '') for each in Msg]
-
-    Filters = ['â€˜', 'Ã', 'Â', 'Â»', 'â€”', '>', '+', '*', '!', '<', '=', '/', '\b', '[', ']', '|', '(', ')', ',', "'"]
-
-    for i in range(0, len(Filters)):
-        Msg = [each.replace(Filters[i], ' ') for each in Msg]
-
-    Msg = list(filter(None, Msg))
-    return (Msg)
-
-
-
-# Clean after username is assigned
-def cleanBody(Msg, Username):
-
-    # Remove Username from array
-    if not Username == '':
-        Msg.remove(Username)
-
-    # Remove redundant characters
-    Msg = [each.replace('-', '') for each in Msg]
-    Msg = [each.replace('.', '') for each in Msg]
-    Msg = [each.replace(':', ' ') for each in Msg]
-
-    # Remove None Types
-    Msg = filter(None, Msg)
-
-    # All-Caps for uniform item names
-    Msg = [each.upper() for each in Msg]
-
-    return(Msg)
-
-
-
-# Optimize input line for processing
-def convertLine(Msg):
-
-    global MsgWordsOriginal
-
-    # Split each word of sentence
-    MsgWords = re.sub("[^\w+.-]", " ",  Msg).split()
-
-    # Take 'Backup' of original str for debugging
-    MsgWordsOriginal = Msg
-
-    return (MsgWords)
-
-
-
-# Check if str contains number (for price/count)
-def hasNumbers(string):
-    return any(char.isdigit() for char in string)
-
-
-# Check if string contains full word
-def matchString(string1, string2):
-   if re.search(r"\b" + re.escape(string1) + r"\b", string2):
-      return True
-   return False
-
-
-
-
-# Message interpretation
-#---------------------------
+import request
 
 
 # Syntax Variables
@@ -99,7 +20,7 @@ TOlist = ['WTS', 'WTB', 'PC']
 Blueprint = ['BLUEPRINT', 'BP']
 Systems = ['SYSTEMS', 'SYSTEM', 'SYS']
 Chassis = ['CHASSIS', 'CHAS']
-Neuroptics = ['NEUROPTICS', 'HELMET', 'HELM', 'HEAD']
+Neuroptics = ['NEUROPTICS', 'HELMET', 'HELM']
 CompParts = ['Blueprint', 'Systems', 'Chassis', 'Neuroptics']
 
 
@@ -129,6 +50,14 @@ def getTradeOperator(string):
 
 
 
+# Match the given item against those stored in database
+def getItem(requested, stored):
+    dbName = ItemJSON[j]["name"].upper()
+    dbType = ItemJSON[j]["type"].upper()
+    dbComp = [each.upper() for each in ItemJSON[j]["components"]]
+
+
+
 # Get Item + Components (i+3 further)
 def getRequest(i, stringArr, ItemJSON, TOcount, TOval):
 
@@ -136,8 +65,6 @@ def getRequest(i, stringArr, ItemJSON, TOcount, TOval):
         TO = TOval[TOcount - 1]
     else:
         TO = ''
-
-    i = i
 
     ItemID = ''
     ItemComp = ''
@@ -150,11 +77,6 @@ def getRequest(i, stringArr, ItemJSON, TOcount, TOval):
 
     # Check if string matches any ID
     for j in range(0, len(ItemJSON)):
-        dbID = ItemJSON[j]["name"].upper()
-        dbIDwords = dbID.split()
-        dbType = ItemJSON[j]["type"].upper()
-        dbComp = [each.upper() for each in ItemJSON[j]["components"]]
-
 
         # If string in Message matches
         if matchString(stringArr[i], dbID):
@@ -239,3 +161,22 @@ def appendComponents(array):
                 array.extend(CompList)
 
     return(array)
+
+
+
+
+
+
+
+
+# Check if str contains number (for price/count)
+def hasNumbers(string):
+    return any(char.isdigit() for char in string)
+
+
+
+# Check if string contains full word
+def matchString(string1, string2):
+   if re.search(r"\b" + re.escape(string1) + r"\b", string2):
+      return True
+   return False

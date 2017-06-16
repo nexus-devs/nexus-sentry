@@ -3,5 +3,5 @@
 # Example .gitignore files: https://github.com/github/gitignore
 /bower_components/
 /node_modules/
-/__pycache__/
-/tools/
+/build/
+/.vs/

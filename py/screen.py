@@ -6,14 +6,13 @@ from PIL import ImageEnhance
 import PIL.ImageOps
 import pytesseract
 import builtins
-
-
+import ctypes
 
 # Take Screenshot and resize
 def shot():
 
     global img
-    img = ImageGrab.grab(bbox=(0,365,1525,755))
+    img = ImageGrab.grab(bbox=(0,365,2525,1755))
 
     basewidth = 5300
     wpercent = (basewidth / float(img.size[0]))
@@ -36,16 +35,7 @@ def enhance():
 
 # Tesseract. Returns array with each line in chat
 def ocr():
-
-    original_open = open
-    def bin_open(filename, mode='rb'):
-        return original_open(filename, mode)
-
-    try:
-        builtins.open = bin_open
-        bts = pytesseract.image_to_string(img).decode("utf-8")
-    finally:
-        builtins.open = original_open
+    bts = pytesseract.image_to_string(img)
 
     Msg = []
     for line in bts.splitlines():
@@ -53,4 +43,3 @@ def ocr():
             Msg.append(line)
 
     return (Msg)
-
