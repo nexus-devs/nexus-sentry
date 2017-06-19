@@ -15,7 +15,8 @@ class NexusSentry : public node::ObjectWrap {
   ~NexusSentry();
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void PlusOne(const v8::FunctionCallbackInfo<v8::Value>& args);
+  //static void screenshot(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void scan(const v8::FunctionCallbackInfo<v8::Value>& args);
   static v8::Persistent<v8::Function> constructor;
 };
 

@@ -1,4 +1,4 @@
-
+# Just a blueprint, not implemented
 !!!NOTE: partitions contain found item AND its possible components
 
 # Describes the request for all items in a given string
