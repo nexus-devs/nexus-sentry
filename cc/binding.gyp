@@ -1,19 +1,20 @@
+#temporarily stored here, should be in root level for compilation
 {
   "targets": [
     {
       "target_name": "addon",
       "sources": [
-        "./src/addon.cc",
-        "./src/NexusSentry.cc",
-        "./src/OCR.cc"
+        "cc/src/addon.cc",
+        "cc/src/NexusSentry.cc",
+        "cc/src/OCR.cc"
       ],
       "include_dirs": [
-        "./include/"
+        "cc/include/"
       ],
       "link_settings": {
           "libraries": [
-              "-l <(module_root_dir)/lib/liblept168",
-              "-l <(module_root_dir)/lib/libtesseract302",
+              "-l <(module_root_dir)/cc/lib/liblept168",
+              "-l <(module_root_dir)/cc/lib/libtesseract302",
           ],
       },
       "cflags": [
