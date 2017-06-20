@@ -38,6 +38,7 @@ class Request {
                     item: item,
                     index: i
                 })
+                i += item.length - 1
             }
         }
 
