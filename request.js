@@ -53,7 +53,7 @@ class Request {
 
             // End of last partition is end of message
             else {
-                partitions[i - 1].message = this.message.slice(lastIndex, partitions.length)
+                partitions[i - 1].message = this.message.slice(lastIndex, this.message.length)
             }
         }
         console.log(partitions)
