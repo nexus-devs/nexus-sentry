@@ -4,7 +4,7 @@
  * const nexus = new NexusSentry;
  */
 const screen = require("./screen.js")
-//const Request = require("./request.js")
+const Request = require("./request.js")
 const Nexus = require("nexus-stats-api")
 
 
@@ -17,17 +17,23 @@ class NexusSentry {
      * Connecto to api.nexus-stats.com, get item list
      */
     constructor() {
+
+        // Connect to api.nexus-stats.com
         this.client = new Nexus({
-            api_url: "https://api.nexus-stats.com",
-            auth_url: "https://auth.nexus-stats.com/",
-            user_key: "SNaLXJnb72Iup5keccWpR6Llxehujjwd5cfRJtSOCprd4KsAOEuE9WoXsNynfS9j",
-            user_secret: "ZoPP1ZgicPRMOOx8mVHlicCIEtkfaBnBvdaX9lqnowJfvT2pJE9l8Bz9AfjmHQhV",
+            api_url: "http://localhost:3010",
+            auth_url: "http://localhost:3030",
+            user_key: "Vf9W14UqTOceb6p6hTarH9LCbJCIKpY1PLUFHFj68cpWnLM91S2pzELKUc8bGn9I",
+            user_secret: "wSIKrCEldMIeKi7W6Q0ITHSAudnzXWYUEAEFe1HmZEbPcyjnW4VNjjuwxpmAB05C",
             ignore_limiter: true
         })
+
+        // Get list of items
+        this.items = {}
         this.client.get("/warframe/v1/items").then(res => {
-            this.items = res.body
+            this.items = JSON.parse(res.body)
         })
 
+        // Time before item list gets refreshed
         this.cacheDuration = 60000
         this.cacheTimer = new Date
     }
@@ -65,7 +71,8 @@ class NexusSentry {
                     console.log("message: " + message)
 
                     // Have message interpreted into usable request
-                    //let request = new Request(message, items)
+                    let request = new Request(message, this.items)
+                    //console.log(request)
 
                     // Request contains all offers in single request
                     //request.forEach(offer => {
