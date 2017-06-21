@@ -180,6 +180,16 @@ class Request {
      */
     getComponents() {
         for (let partition of this.partitions) {
+            let offer = {
+                user: this.user,
+                offer: partition.offer,
+                item: partition.item.name,
+                component: "Set", // default if none other found
+                index: partition.index,
+                subIndex: 0,
+                message: this.message,
+                subMessage: partition.message
+            }
 
             // Iterate through each word
             for (let i = 0; i < partition.message.length; i++) {
@@ -188,21 +198,16 @@ class Request {
 
                 // Match against components from api
                 for (let component of partition.item.components) {
-                    if (word.includes(component)) {
-                        let offer = {
-                            user: this.user,
-                            offer: partition.offer,
-                            item: partition.item.name,
-                            component: component,
-                            index: partition.index,
-                            subIndex: i,
-                            message: this.message,
-                            subMessage: partition.message
-                        }
+                    if (word.toLowerCase().includes(component.toLowerCase())) {
+                        offer.component = component
+                        offer.subIndex = i
                         this.offers.push(offer)
                     }
                 }
             }
+
+            // No component found, push full set
+            offer.component === "Set" ? this.offers.push(offer) : null
         }
     }
 
@@ -226,7 +231,7 @@ class Request {
     getValue() {
         for (let offer of this.offers) {
             let substring = offer.subMessage.slice(offer.subIndex, offer.subMessage.length)
-            console.log(substring)
+            //console.log(substring)
         }
     }
 }
