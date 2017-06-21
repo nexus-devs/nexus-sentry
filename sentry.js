@@ -71,7 +71,7 @@ class NexusSentry {
 
                     // Have message interpreted into usable request
                     let request = new Request(message, this.items)
-                    //console.log(request)
+                    console.log(request)
 
                     // Request contains all offers in single request
                     //request.forEach(offer => {

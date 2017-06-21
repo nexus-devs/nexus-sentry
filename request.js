@@ -1,3 +1,11 @@
+const selling = ["wts", "selling", "wtsell"]
+const buying = ["wtb", "buying", "wtbuy"]
+const componentSubstitutes = {
+    Blueprint: ["bp"],
+    Systems: ["system", "sys"],
+    Chassis: ["chas"]
+}
+
 class Request {
 
     /**
@@ -5,6 +13,7 @@ class Request {
      */
     constructor(message, items) {
         this.message = message.split(" ")
+        this.offers = []
         this.interpret(items)
     }
 
@@ -47,7 +56,7 @@ class Request {
                     item: item,
                     index: i
                 })
-                i += item.length - 1
+                i += item.name.split(" ").length - 1 // skip to next word
             }
         }
 
@@ -66,9 +75,7 @@ class Request {
                 partitions[i - 1].message = this.message.slice(lastIndex, this.message.length)
             }
         }
-        console.log(this.message.join(" "))
-        console.log(partitions)
-        console.log("\n")
+
         this.partitions = partitions
     }
 
@@ -120,7 +127,49 @@ class Request {
      * If yes, increase index and save keyword in detected list
      */
     getOfferType() {
+        let index = []
 
+        // First pass, find offer indices
+        for (let partition of this.partitions) {
+            for (let word of partition.message) {
+                if (selling.includes(word.toLowerCase())) {
+                    index.push({
+                        type: "Selling",
+                        index: partition.index
+                    })
+                } else if (buying.includes(word.toLowerCase())) {
+                    index.push({
+                        type: "Buying",
+                        index: partition.index
+                    })
+                }
+            }
+        }
+
+        // Second pass, match indices to partitions
+        let current = 0
+        for (let partition of this.partitions) {
+
+            // No offer type given
+            if (!index[current]) {
+                break
+            }
+
+            // Only one offer type
+            else if (!index[current + 1]) {
+                partition.offer = index[current].type
+            }
+
+            // Multiple offers
+            else if (partition.index < index[current + 1].index) {
+                partition.offer = index[current].type
+            } else if (partition.index >= index[current + 1].index) {
+                partition.offer = index[current].type
+
+                // More offer types available?
+                if (index[current + 1]) current++
+            }
+        }
     }
 
 
@@ -130,7 +179,43 @@ class Request {
      * parent item.
      */
     getComponents() {
+        for (let partition of this.partitions) {
 
+            // Iterate through each word
+            for (let i = 0; i < partition.message.length; i++) {
+                let word = partition.message[i]
+                this.matchComponentSubstitutes(word)
+
+                // Match against components from api
+                for (let component of partition.item.components) {
+                    if (word.includes(component)) {
+                        let offer = {
+                            user: this.user,
+                            offer: partition.offer,
+                            item: partition.item.name,
+                            component: component,
+                            index: partition.index,
+                            subIndex: i,
+                            message: this.message,
+                            subMessage: partition.message
+                        }
+                        this.offers.push(offer)
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Replace component with possible variation
+     */
+    matchComponentSubstitutes(component) {
+        for (let substitute in componentSubstitutes) {
+            if (componentSubstitutes[substitute].includes(component)) {
+                component = substitute
+            }
+        }
     }
 
 
@@ -139,7 +224,10 @@ class Request {
      * Price, rank, item count
      */
     getValue() {
-        
+        for (let offer of this.offers) {
+            let substring = offer.subMessage.slice(offer.subIndex, offer.subMessage.length)
+            console.log(substring)
+        }
     }
 }
 
