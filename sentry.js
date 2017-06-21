@@ -68,7 +68,6 @@ class NexusSentry {
 
                     // Non-Empty line always starts with character
                     if(message[0] === undefined || message[0] === " ") return
-                    console.log("message: " + message)
 
                     // Have message interpreted into usable request
                     let request = new Request(message, this.items)
