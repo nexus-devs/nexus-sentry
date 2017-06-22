@@ -8,6 +8,7 @@
   },
   "author": "",
   "dependencies": {
+    "lodash": "^4.17.4",
     "nexus-stats-api": "0.0.25",
     "node-tesseract": "^0.2.7",
     "screenshot-desktop": "^1.1.0",

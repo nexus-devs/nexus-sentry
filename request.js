@@ -1,3 +1,4 @@
+const _ = require("lodash")
 const selling = ["wts", "selling", "wtsell"]
 const buying = ["wtb", "buying", "wtbuy"]
 const componentSubstitutes = {
@@ -180,6 +181,7 @@ class Request {
      */
     getComponents() {
         for (let partition of this.partitions) {
+
             let offer = {
                 user: this.user,
                 offer: partition.offer,
@@ -198,10 +200,16 @@ class Request {
 
                 // Match against components from api
                 for (let component of partition.item.components) {
-                    if (word.toLowerCase().includes(component.toLowerCase())) {
-                        offer.component = component
-                        offer.subIndex = i
-                        this.offers.push(offer)
+                    let cwords = component.split(" ")
+
+                    // Component is single word
+                    if (cwords.length < 2) {
+                        this.addSingleComponent(partition, component, offer, i)
+                    }
+
+                    // Component has multiple words, at least first matches
+                    else if (word.toLowerCase().includes(cwords[0].toLowerCase())) {
+                        this.addMultiComponent(partition, component, offer, i)
                     }
                 }
             }
@@ -225,12 +233,54 @@ class Request {
 
 
     /**
+     * Component consists of single word
+     */
+    addSingleComponent(partition, component, offer, i) {
+        let word = partition.message[i]
+        if (word.toLowerCase().includes(component.toLowerCase())) {
+            offer.component = component
+            offer.subIndex = i
+            this.offers.push(offer)
+        }
+    }
+
+
+    /**
+     * Component has multiple words, matches further if first one does
+     */
+    addMultiComponent(partition, component, offer, i) {
+        let cwords = component.split(" ")
+        for (let j = 1; j < cwords.length; j++) {
+            let nextWord = partition.message[i + j]
+
+            // Next word matches
+            if (nextWord && nextWord.toLowerCase().includes(cwords[j].toLowerCase())) {
+
+                // Matched until end, clone & push offer (clone so it can't be mutated)
+                if (j === cwords.length - 1) {
+                    offer.component = component
+                    offer.subIndex = i
+                    this.offers.push(_.cloneDeep(offer))
+                    i += cwords.length - 1 // skip to next
+                }
+            }
+
+            // Next word not matching
+            else {
+                break
+            }
+        }
+    }
+
+
+    /**
      * Get numerical values for request.
      * Price, rank, item count
      */
     getValue() {
         for (let offer of this.offers) {
             let substring = offer.subMessage.slice(offer.subIndex, offer.subMessage.length)
+            //console.log(offer)
             //console.log(substring)
         }
     }

@@ -31,6 +31,8 @@ class NexusSentry {
         this.items = {}
         this.client.get("/warframe/v1/items").then(res => {
             this.items = JSON.parse(res.body)
+            let request = new Request("GABEN: WTS [Cernos Prime] Upper Limb 50p, Lower Limb 30p, 3x String for 20", this.items)
+            console.log(request)
         })
 
         // Time before item list gets refreshed
@@ -43,7 +45,7 @@ class NexusSentry {
      * Neverending screen monitoring
      */
     monitor() {
-        this.scan().then(this.monitor)
+        this.process().then(this.monitor)
     }
 
 
@@ -51,13 +53,15 @@ class NexusSentry {
      * Read, Interpret, Send
      */
     process() {
+
+        /*
         return new Promise((resolve, reject) => {
 
             // Sync item cache every minute
             if (new Date - this.cacheTimer > this.cacheDuration) {
                 this.cacheTimer = new Date
                 nexus.get("/warframe/v1/items").then(res => {
-                    items = res.body
+                    this.items = res.body
                 })
             }
 
@@ -70,17 +74,18 @@ class NexusSentry {
                     if(message[0] === undefined || message[0] === " ") return
 
                     // Have message interpreted into usable request
-                    let request = new Request(message, this.items)
-                    //console.log(request)
+                    let request = new Request("GABEN: WTS [Cernos Prime] Upper Limb 50p, Lower Limb 30p, 3x String for 20", this.items)
+                    console.log(request)
 
                     // Request contains all offers in single request
                     //request.forEach(offer => {
                     //    nexus.post("/warframe/v1/requests/new", offer)
                     //})
-                })
+                 })
                 resolve() // all messages processed
             })
         })
+        */
     }
 }
 
