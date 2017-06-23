@@ -304,6 +304,7 @@ class Request {
 
                 // Item count conditions
                 let containsDecimalX = /(\dx)|(x\d)/.test(this.message[offer.index + offer.subIndex + i].toLowerCase())
+                let containsDecimalXPrevious = /(\dx)|(x\d)/.test(this.message[offer.index + offer.subIndex + i - 1].toLowerCase())
                 let containsDecimalPreviousX = (/\d/.test(this.message[offer.index + offer.subIndex + i]) && this.message[offer.index + offer.subIndex + i - 1] === "x")
                 let containsDecimalNextX = (/\d/.test(this.message[offer.index + offer.subIndex + i]) && this.message[offer.index + offer.subIndex + i + 1] === "x")
 
@@ -324,8 +325,16 @@ class Request {
                  */
 
                 // Word is item count?
-                if (containsDecimalX || containsDecimalPreviousX || containsDecimalNextX) {
-                    offer.count = offer.count > 1 ? offer.count : parsedInt
+                if (containsDecimalX || containsDecimalXPrevious || containsDecimalPreviousX || containsDecimalNextX) {
+
+                    // Count is outside of partition
+                    if (containsDecimalXPrevious) {
+                        offer.count = parseInt(this.message[offer.index + offer.subIndex + i - 1].replace(/\D/g,""))
+                        // Reset count of previous offer
+                        this.offers[j - 1].offer = 1
+                    } else {
+                        offer.count = offer.count > 1 ? offer.count : parsedInt
+                    }
                 }
 
                 // Word is rank?
