@@ -301,23 +301,26 @@ class Request {
                 /**
                  * Detection conditions separate to make if conditions readable
                  */
+                let inspect = (i => {
+                    return this.message[offer.index + offer.subIndex + i]
+                })
 
                 // Item count conditions
-                let containsDecimalX = /(\dx)|(x\d)/.test(this.message[offer.index + offer.subIndex + i].toLowerCase())
-                let containsDecimalXPrevious = /(\dx)|(x\d)/.test(this.message[offer.index + offer.subIndex + i - 1].toLowerCase())
-                let containsDecimalPreviousX = (/\d/.test(this.message[offer.index + offer.subIndex + i]) && this.message[offer.index + offer.subIndex + i - 1] === "x")
-                let containsDecimalNextX = (/\d/.test(this.message[offer.index + offer.subIndex + i]) && this.message[offer.index + offer.subIndex + i + 1] === "x")
+                let containsDecimalX = /(\dx)|(x\d)/.test(inspect(i).toLowerCase())
+                let containsDecimalXPrevious = /(\dx)|(x\d)/.test(inspect(i - 1).toLowerCase())
+                let containsDecimalPreviousX = (/\d/.test(inspect(i)) && inspect(i - 1) === "x")
+                let containsDecimalNextX = (/\d/.test(inspect(i)) && inspect(i + 1) === "x")
 
                 // Item rank conditions
-                let containsDecimalR = /(\dr)|(r\d)/.test(this.message[offer.index + offer.subIndex + i].toLowerCase())
-                let containsDecimalRank = (/\d/.test(this.message[offer.index + offer.subIndex + i] && this.message[offer.index + offer.subIndex + i].toLowerCase().includes("rank")))
-                let containsDecimalPreviousRank = (/\d/.test(this.message[offer.index + offer.subIndex + i] && this.message[offer.index + offer.subIndex + i - 1].toLowerCase() === "rank"))
+                let containsDecimalR = /(\dr)|(r\d)/.test(inspect(i).toLowerCase())
+                let containsDecimalRank = (/\d/.test(inspect(i) && inspect(i).toLowerCase().includes("rank")))
+                let containsDecimalPreviousRank = (/\d/.test(inspect(i) && inspect(i - 1).toLowerCase() === "rank"))
 
                 // Item Price Conditions
-                let containsDecimal = /\d/.test(this.message[offer.index + offer.subIndex + i])
+                let containsDecimal = /\d/.test(inspect(i))
 
                 // Parsed Value
-                let parsedInt = parseInt(this.message[offer.index + offer.subIndex + i].replace(/\D/g,""))
+                let parsedInt = parseInt(inspect(i).replace(/\D/g,""))
 
 
                 /**
@@ -329,9 +332,9 @@ class Request {
 
                     // Count is outside of partition
                     if (containsDecimalXPrevious) {
-                        offer.count = parseInt(this.message[offer.index + offer.subIndex + i - 1].replace(/\D/g,""))
+                        offer.count = parseInt(inspect(i - 1).replace(/\D/g,""))
                         // Reset count of previous offer
-                        this.offers[j - 1].offer = 1
+                        this.offers[j - 1].count = 1
                     } else {
                         offer.count = offer.count > 1 ? offer.count : parsedInt
                     }
@@ -362,7 +365,7 @@ class Request {
             delete offer.message
 
             offer.rawMessage = this.raw
-            offer.subMessage.join(" ")
+            offer.subMessage = offer.subMessage.join(" ")
         }
     }
 }

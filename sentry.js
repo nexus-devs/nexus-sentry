@@ -31,8 +31,8 @@ class NexusSentry {
         this.items = {}
         this.client.get("/warframe/v1/items").then(res => {
             this.items = JSON.parse(res.body)
-            let request = new Request("GABEN: WTS [Cernos Prime] Upper Limb 50p, Lower Limb 30p, 3x String for 20, Sancti Tigris x 2 50p, Tigris Prime Barrel 50p 3x Argon Scope R5", this.items)
-            console.log(request.offers)
+            //let request = new Request("GABEN: WTS [Cernos Prime] Upper Limb 50p, Lower Limb 30p, 3x String for 20, Sancti Tigris x 2 50p, Tigris Prime Barrel 50p 3x Argon Scope R5", this.items)
+            //console.log(request.offers)
         })
 
         // Time before item list gets refreshed
@@ -53,8 +53,6 @@ class NexusSentry {
      * Read, Interpret, Send
      */
     process() {
-
-        /*
         return new Promise((resolve, reject) => {
 
             // Sync item cache every minute
@@ -74,7 +72,7 @@ class NexusSentry {
                     if(message[0] === undefined || message[0] === " ") return
 
                     // Have message interpreted into usable request
-                    let request = new Request("GABEN: WTS [Cernos Prime] Upper Limb 50p, Lower Limb 30p, 3x String for 20", this.items)
+                    let request = new Request(message, this.items)
                     console.log(request)
 
                     // Request contains all offers in single request
@@ -85,7 +83,6 @@ class NexusSentry {
                 resolve() // all messages processed
             })
         })
-        */
     }
 }
 
