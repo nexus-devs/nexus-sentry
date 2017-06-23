@@ -3,6 +3,13 @@ const sharp = require("sharp")
 const ss = require("screenshot-desktop")
 const fs = require("fs")
 const path = __dirname + "/.tmp/screen.png"
+const tessOptions = {
+	l: 'eng',
+	psm: 6
+}
+
+// Ensure .tmp path exists, or else screen won't be saved
+fs.existsSync(".tmp") ? null : fs.mkdirSync(".tmp")
 
 
 /**
@@ -28,8 +35,8 @@ class Screen {
 
     ocr() {
         return new Promise((resolve, reject) => {
-            tesseract.process(path, (err, message) => {
-                resolve(message)
+            tesseract.process(path, tessOptions, (err, message) => {
+                err ? console.log(err) : resolve(message)
             })
         })
     }
