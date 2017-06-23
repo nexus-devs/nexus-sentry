@@ -295,26 +295,26 @@ class Request {
             // but we need to check for words before the current item partition
             // e.g. "3x Tigris Prime" would otherwise not be detected since the partition
             // starts at Tigris Prime
-            for (let i = 0; i < offer.subMessage.length; i++) {
+            for (let i = 0; i < offer.subMessage.length && this.message[offer.index + offer.subIndex + i]; i++) {
 
 
                 /**
                  * Detection conditions separate to make if conditions readable
                  */
-                let inspect = (i => {
-                    return this.message[offer.index + offer.subIndex + i]
+                let inspect = (index => {
+                    return this.message[offer.index + offer.subIndex + index]
                 })
 
                 // Item count conditions
                 let containsDecimalX = /(\dx)|(x\d)/.test(inspect(i).toLowerCase())
-                let containsDecimalXPrevious = /(\dx)|(x\d)/.test(inspect(i - 1).toLowerCase())
-                let containsDecimalPreviousX = (/\d/.test(inspect(i)) && inspect(i - 1) === "x")
-                let containsDecimalNextX = (/\d/.test(inspect(i)) && inspect(i + 1) === "x")
+                let containsDecimalXPrevious = inspect(i - 1) && /(\dx)|(x\d)/.test(inspect(i - 1).toLowerCase())
+                let containsDecimalPreviousX = /\d/.test(inspect(i)) && inspect(i - 1) === "x"
+                let containsDecimalNextX = /\d/.test(inspect(i)) && inspect(i + 1) === "x"
 
                 // Item rank conditions
                 let containsDecimalR = /(\dr)|(r\d)/.test(inspect(i).toLowerCase())
-                let containsDecimalRank = (/\d/.test(inspect(i) && inspect(i).toLowerCase().includes("rank")))
-                let containsDecimalPreviousRank = (/\d/.test(inspect(i) && inspect(i - 1).toLowerCase() === "rank"))
+                let containsDecimalRank = /\d/.test(inspect(i) && inspect(i).toLowerCase().includes("rank"))
+                let containsDecimalPreviousRank = inspect(i - 1) && /\d/.test(inspect(i) && inspect(i - 1).toLowerCase() === "rank")
 
                 // Item Price Conditions
                 let containsDecimal = /\d/.test(inspect(i))
@@ -366,6 +366,11 @@ class Request {
 
             offer.rawMessage = this.raw
             offer.subMessage = offer.subMessage.join(" ")
+
+            // Assume Selling if offer undefined
+            // Only occurs if no Selling/Buying was given
+            // Usually happens when weird people grief for attention (sellers)
+            offer.offer = offer.offer ? offer.offer : "Selling"
         }
     }
 }

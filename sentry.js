@@ -58,7 +58,7 @@ class NexusSentry {
             // Sync item cache every minute
             if (new Date - this.cacheTimer > this.cacheDuration) {
                 this.cacheTimer = new Date
-                nexus.get("/warframe/v1/items").then(res => {
+                this.client.get("/warframe/v1/items").then(res => {
                     this.items = res.body
                 })
             }
@@ -73,12 +73,11 @@ class NexusSentry {
 
                     // Have message interpreted into usable request
                     let request = new Request(message, this.items)
-                    console.log(request)
 
                     // Request contains all offers in single request
-                    //request.forEach(offer => {
-                    //    nexus.post("/warframe/v1/requests/new", offer)
-                    //})
+                    request.offers.forEach(offer => {
+                        this.client.post("/warframe/v1/requests/new", offer)
+                    })
                  })
                 resolve() // all messages processed
             })
