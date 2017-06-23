@@ -31,8 +31,8 @@ class NexusSentry {
         this.items = {}
         this.client.get("/warframe/v1/items").then(res => {
             this.items = JSON.parse(res.body)
-            let request = new Request("GABEN: WTS [Cernos Prime] Upper Limb 50p, Lower Limb 30p, 3x String for 20", this.items)
-            console.log(request)
+            let request = new Request("GABEN: WTS [Cernos Prime] Upper Limb 50p, Lower Limb 30p, 3x String for 20, Sancti Tigris x 2 50p, Tigris Prime Barrel 50p 3x Argon Scope R5", this.items)
+            console.log(request.offers)
         })
 
         // Time before item list gets refreshed

@@ -13,7 +13,11 @@ class Request {
      * Something something
      */
     constructor(message, items) {
-        this.message = message.split(" ")
+        this.raw = message
+        this.message = message.split("[").join(" ")
+                              .split("]").join(" ")
+                              .split("  ").join(" ")
+                              .split(" ")
         this.offers = []
         this.interpret(items)
     }
@@ -32,6 +36,9 @@ class Request {
 
         // Interpret the resulting partitions individually
         this.getOffers()
+
+        // Prepare for output
+        this.cleanOffers()
     }
 
 
@@ -114,11 +121,9 @@ class Request {
      * Takes each partitioned message and analyzes content
      */
     getOffers() {
-        for (let partition in this.partitions) {
-            this.getOfferType()
-            this.getComponents()
-            this.getValue()
-        }
+        this.getOfferType()
+        this.getComponents()
+        this.getValue()
     }
 
 
@@ -187,10 +192,13 @@ class Request {
                 offer: partition.offer,
                 item: partition.item.name,
                 component: "Set", // default if none other found
+                price: null, // overwritten in this.getValue()
+                rank: 0, // ",
+                maxRank: partition.item.ranks,
+                count: 1, // "
                 index: partition.index,
                 subIndex: 0,
-                message: this.message,
-                subMessage: partition.message
+                message: partition.message
             }
 
             // Iterate through each word
@@ -278,10 +286,74 @@ class Request {
      * Price, rank, item count
      */
     getValue() {
+        for (let j = 0; j < this.offers.length; j++) {
+            let offer = this.offers[j]
+            offer.subMessage = offer.message.slice(offer.subIndex, (this.offers[j + 1] && this.offers[j + 1].item === offer.item) ? this.offers[j + 1].subIndex : offer.message.length)
+
+            // Detect values
+            // NOTE: this.message[offer.index + offer.subIndex + i] equals offer.subMessage,
+            // but we need to check for words before the current item partition
+            // e.g. "3x Tigris Prime" would otherwise not be detected since the partition
+            // starts at Tigris Prime
+            for (let i = 0; i < offer.subMessage.length; i++) {
+
+
+                /**
+                 * Detection conditions separate to make if conditions readable
+                 */
+
+                // Item count conditions
+                let containsDecimalX = /(\dx)|(x\d)/.test(this.message[offer.index + offer.subIndex + i].toLowerCase())
+                let containsDecimalPreviousX = (/\d/.test(this.message[offer.index + offer.subIndex + i]) && this.message[offer.index + offer.subIndex + i - 1] === "x")
+                let containsDecimalNextX = (/\d/.test(this.message[offer.index + offer.subIndex + i]) && this.message[offer.index + offer.subIndex + i + 1] === "x")
+
+                // Item rank conditions
+                let containsDecimalR = /(\dr)|(r\d)/.test(this.message[offer.index + offer.subIndex + i].toLowerCase())
+                let containsDecimalRank = (/\d/.test(this.message[offer.index + offer.subIndex + i] && this.message[offer.index + offer.subIndex + i].toLowerCase().includes("rank")))
+                let containsDecimalPreviousRank = (/\d/.test(this.message[offer.index + offer.subIndex + i] && this.message[offer.index + offer.subIndex + i - 1].toLowerCase() === "rank"))
+
+                // Item Price Conditions
+                let containsDecimal = /\d/.test(this.message[offer.index + offer.subIndex + i])
+
+                // Parsed Value
+                let parsedInt = parseInt(this.message[offer.index + offer.subIndex + i].replace(/\D/g,""))
+
+
+                /**
+                 * Actual detection conditions
+                 */
+
+                // Word is item count?
+                if (containsDecimalX || containsDecimalPreviousX || containsDecimalNextX) {
+                    offer.count = offer.count > 1 ? offer.count : parsedInt
+                }
+
+                // Word is rank?
+                else if (containsDecimalR || containsDecimalRank || containsDecimalPreviousRank) {
+                    offer.rank = offer.rank > 1 || parsedInt > offer.maxRank ? offer.rank : parsedInt
+                }
+
+                // Word is price if it contains decimals
+                else if (containsDecimal) {
+                    offer.price = offer.price ? offer.price : parsedInt
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Remove unnecessary keys from offers
+     */
+    cleanOffers() {
         for (let offer of this.offers) {
-            let substring = offer.subMessage.slice(offer.subIndex, offer.subMessage.length)
-            //console.log(offer)
-            //console.log(substring)
+            delete offer.index
+            delete offer.subIndex
+            delete offer.maxRank
+            delete offer.message
+
+            offer.rawMessage = this.raw
+            offer.subMessage.join(" ")
         }
     }
 }
