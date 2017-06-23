@@ -7,5 +7,4 @@ const sentry = new Sentry()
 /**
  * Initialize monitor loop
  */
-//sentry.monitor()
-sentry.process()
+sentry.monitor()
