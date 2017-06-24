@@ -29,7 +29,7 @@ class Screen {
         return new Promise((resolve, reject) => {
             sharp(image).greyscale()
                         .negate()
-                        .toFile(path, () => resolve() )
+                        .toFile(path, () => resolve())
         })
     }
 

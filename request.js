@@ -18,7 +18,6 @@ class Request {
                               .split("]").join(" ")
                               .split("  ").join(" ")
                               .split(" ")
-        this.offers = []
         this.interpret(items)
     }
 
@@ -32,13 +31,13 @@ class Request {
         this.getUser()
 
         // Get markers where new item starts
-        this.getMarkers(items)
+        this.user ? this.getMarkers(items) : null
 
         // Interpret the resulting partitions individually
-        this.getOffers()
+        this.partitions ? this.getOffers() : null
 
         // Prepare for output
-        this.cleanOffers()
+        this.offers ? this.cleanOffers() : null
     }
 
 
@@ -94,7 +93,7 @@ class Request {
     matchItem(i, items) {
         let matched = undefined
         for (let j = 0; j < items.length; j++) {
-            let item = items[j].name.split(" ")
+            let item = items[j].name ? items[j].name.split(" ") : console.log(items[j] + " " + typeof items)
 
             // Item contained in message? Match further words
             for (let k = 0; k < item.length; k++) {
@@ -121,6 +120,7 @@ class Request {
      * Takes each partitioned message and analyzes content
      */
     getOffers() {
+        this.offers = []
         this.getOfferType()
         this.getComponents()
         this.getValue()
@@ -334,7 +334,9 @@ class Request {
                     if (containsDecimalXPrevious) {
                         offer.count = parseInt(inspect(i - 1).replace(/\D/g,""))
                         // Reset count of previous offer
-                        this.offers[j - 1].count = 1
+                        if (this.offers[j - 1]) {
+                            this.offers[j - 1].count = 1
+                        }
                     } else {
                         offer.count = offer.count > 1 ? offer.count : parsedInt
                     }

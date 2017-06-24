@@ -57,7 +57,7 @@ class NexusSentry {
             if (new Date - this.cacheTimer > this.cacheDuration) {
                 this.cacheTimer = new Date
                 this.client.get("/warframe/v1/items").then(res => {
-                    this.items = res.body
+                    this.items = JSON.parse(res.body)
                 })
             }
 
@@ -72,10 +72,11 @@ class NexusSentry {
                     let request = new Request(message, this.items)
 
                     // Request contains all offers in single request
-                    request.offers.forEach(offer => {
+                    request.offers ? request.offers.forEach(offer => {
                         this.client.post("/warframe/v1/requests/new", offer)
-                    })
-                 })
+                    }) : null
+                    //console.log(request)
+                })// no conten
                 resolve() // all messages processed
             })
         })
