@@ -365,7 +365,7 @@ class Request {
             delete offer.message
 
             offer.rawMessage = this.raw
-            offer.subMessage = offer.subMessage.join(" ")
+            offer.subMessage = offer.subMessage.join ? offer.subMessage.join(" ") : offer.subMessage
 
             // Assume Selling if offer undefined
             // Only occurs if no Selling/Buying was given
