@@ -43,7 +43,7 @@ class NexusSentry {
      * Neverending screen monitoring
      */
     monitor() {
-        this.process().then(this.monitor)
+        this.process().then(() => this.monitor())
     }
 
 
