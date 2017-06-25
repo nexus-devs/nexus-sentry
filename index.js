@@ -8,3 +8,4 @@ const sentry = new Sentry()
  * Initialize monitor loop
  */
 sentry.monitor()
+//setTimeout(() => sentry.getUserStats("Tobiah"), 2500)

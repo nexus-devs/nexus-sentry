@@ -11,6 +11,8 @@
     "lodash": "^4.17.4",
     "nexus-stats-api": "0.0.25",
     "node-tesseract": "^0.2.7",
+    "robotjs": "^0.4.7",
+    "screen-info": "^1.0.1",
     "screenshot-desktop": "^1.1.0",
     "sharp": "^0.18.1"
   }
