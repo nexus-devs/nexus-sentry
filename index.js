@@ -13,7 +13,8 @@ const sentry = new Sentry()
 
 // Trigger user-stats fetcher directly
  else {
-     sentry.playerSentry.getPlayer("MrBubbleSS") // Tobiah, Chungus, Zilork
      sentry.playerSentry.getPlayer("MrBubbleSS")
-     sentry.playerSentry.getPlayer("MrBubbleSS")
+     sentry.playerSentry.getPlayer("Tobiah")
+     sentry.playerSentry.getPlayer("Chungus")
+     sentry.playerSentry.getPlayer("Zilork")
  }
