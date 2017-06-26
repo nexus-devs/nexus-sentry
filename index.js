@@ -12,4 +12,6 @@ const sentry = new Sentry()
  }
 
 // Trigger user-stats fetcher directly
-//setTimeout(() => sentry.getUserStats("Tobiah"), 2500)
+ else {
+     sentry.playerSentry.getPlayer("xPsycon") // Tobiah, Chungus, Zilork
+ }
