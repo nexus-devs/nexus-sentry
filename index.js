@@ -1,11 +1,15 @@
-/**
- * NexusSentry which reads from display, interprets content and sends to API
- */
 const Sentry = require("./lib/sentry.js")
 const sentry = new Sentry()
 
-/**
- * Initialize monitor loop
- */
-sentry.monitor()
+ // Trade chat monitoring
+ if (process.env.NEXUS_SENTRY_TASK === "monitor") {
+     sentry.monitor()
+ }
+
+ // Interact with game as requested via api.nexus-stats.com
+ else if (process.env.NEXUS_SENTRY_TASK === "listen") {
+     sentry.listen()
+ }
+
+// Trigger user-stats fetcher directly
 //setTimeout(() => sentry.getUserStats("Tobiah"), 2500)
