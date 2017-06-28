@@ -10,15 +10,3 @@ if (process.env.NEXUS_SENTRY_TASK === "monitor") {
 else if (process.env.NEXUS_SENTRY_TASK === "listen") {
     sentry.listen()
 }
-
-// Trigger user-stats fetcher directly
-else {
-    sentry.playerSentry.getPlayer("MrBubbleSS")
-    sentry.playerSentry.getPlayer("Tobiah")
-    sentry.playerSentry.getPlayer("Tobiah") // duplicate test
-    sentry.playerSentry.getPlayer("Tobiah") // duplicate test
-    sentry.playerSentry.getPlayer("Chungus")
-    sentry.playerSentry.getPlayer("Zilork")
-    setTimeout(() => sentry.playerSentry.getPlayer("Tobiah"), 20000)
-    setTimeout(() => sentry.playerSentry.getPlayer("[DE]Danielle"), 30000)
-}
