@@ -15,7 +15,6 @@
     "robotjs": "^0.4.7",
     "screen-info": "^1.0.1",
     "screenshot-desktop": "^1.1.0",
-    "sharp": "^0.18.1",
-    "warframe-updates": "^1.0.1"
+    "sharp": "^0.18.1"
   }
 }
