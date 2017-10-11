@@ -1,6 +1,10 @@
 const Sentry = require("./lib/sentry.js")
 const sentry = new Sentry()
 
+process.on('unhandledRejection', err => {
+  throw err
+})
+
 // Trade chat monitoring
 if (process.env.NEXUS_SENTRY_TASK === "monitor") {
     sentry.monitor()
