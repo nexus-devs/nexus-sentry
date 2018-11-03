@@ -1,4 +1,4 @@
-[![Nexus-Sentry](/banner.png)](https://github.com/nexus-devs)
+[![Nexus-Sentry](/banner.svg)](https://github.com/nexus-devs)
 
 - - - -
 <br>
